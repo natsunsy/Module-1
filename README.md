@@ -24,7 +24,10 @@ python run_tests.py
 ```
 python .\project\run_scalar.py
 ```
-![Simple](./imagen/visdom_image.jpg)
 
-![Xor](./imagen/visdom_image (1).jpg)
+* Simple
+<img src="https://github.com/natsunsy/Module-1/blob/master/imagen/visdom_image.jpg" width="300px">
+
+* Xor
+<img src="https://github.com/natsunsy/Module-1/blob/master/imagen/visdom_image%20(1).jpg" width="300px">
 

@@ -180,8 +180,14 @@ class FunctionBase:
 
         """
         # TODO: Implement for Task 1.3.
-        raise NotImplementedError('Need to implement for Task 1.3')
+        df_dxi_times_d = wrap_tuple(cls.backward(ctx, d_output))
 
+        VarsDvs = []
+        for variable, derivate in zip(inputs, df_dxi_times_d):
+            if not is_constant(variable):
+                VarsDvs.append(VariableWithDeriv(variable, derivate))
+                
+        return VarsDvs
 
 def is_leaf(val):
     return isinstance(val, Variable) and val.history.is_leaf()
@@ -203,4 +209,20 @@ def backpropagate(final_variable_with_deriv):
            and its derivative that we want to propagate backward to the leaves.
     """
     # TODO: Implement for Task 1.4.
-    raise NotImplementedError('Need to implement for Task 1.4')
+    cola = [final_variable_with_deriv]
+
+    while cola:
+        var_dev = cola.pop(0)
+
+        actual_variable = var_dev.variable
+        actual_derivate = var_dev.deriv
+
+        if actual_variable.history.is_leaf():
+            actual_variable._add_deriv(actual_derivate)
+            continue
+
+        list_new_var_dev = actual_variable.history.backprop_step(
+            actual_derivate)
+
+        cola.extend(list_new_var_dev)
+    return

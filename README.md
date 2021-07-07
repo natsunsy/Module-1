@@ -26,8 +26,8 @@ python .\project\run_scalar.py
 ```
 
 * Simple
-<img src="https://github.com/natsunsy/Module-1/blob/master/imagen/visdom_image.jpg" width="300px">
+<img src="https://github.com/natsunsy/Module-1/blob/master/imagen/Simple.png" width="600px">
 
 * Xor
-<img src="https://github.com/natsunsy/Module-1/blob/master/imagen/visdom_image%20(1).jpg" width="300px">
+<img src="https://github.com/natsunsy/Module-1/blob/master/imagen/Xor.png" width="600px">
 

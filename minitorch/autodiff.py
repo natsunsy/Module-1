@@ -186,8 +186,9 @@ class FunctionBase:
         for variable, derivate in zip(inputs, df_dxi_times_d):
             if not is_constant(variable):
                 VarsDvs.append(VariableWithDeriv(variable, derivate))
-                
+
         return VarsDvs
+
 
 def is_leaf(val):
     return isinstance(val, Variable) and val.history.is_leaf()

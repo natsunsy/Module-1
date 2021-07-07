@@ -2,9 +2,8 @@ from .autodiff import FunctionBase, Variable, History
 from . import operators
 import numpy as np
 
-
-## Task 1.1
-## Derivatives
+# Task 1.1
+# Derivatives
 
 
 def central_difference(f, *vals, arg=0, epsilon=1e-6):
@@ -23,7 +22,6 @@ def central_difference(f, *vals, arg=0, epsilon=1e-6):
        float : An approximation of :math:`f'_i(x_0, \ldots, x_{n-1})`
     """
     # TODO: Implement for Task 1.1.
-
     listaSup = list(vals)
     listaSup[arg] = vals[arg] + epsilon
     fSup = f(*listaSup)
@@ -32,10 +30,11 @@ def central_difference(f, *vals, arg=0, epsilon=1e-6):
     listaInf[arg] = vals[arg] - epsilon
     fInf = f(*listaInf)
 
-    return  (fSup - fInf) * 0.5 * (1/epsilon)
+    return (fSup - fInf) * 0.5 * (1 / epsilon)
 
-## Task 1.2 and 1.4
-## Scalar Forward and Backward
+
+# Task 1.2 and 1.4
+# Scalar Forward and Backward
 
 
 class Scalar(Variable):
@@ -74,7 +73,7 @@ class Scalar(Variable):
 
     def __gt__(self, b):
         # TODO: Implement for Task 1.2.
-        return LT.apply(self, b)
+        return LT.apply(b, self)
 
     def __sub__(self, b):
         # TODO: Implement for Task 1.2.
@@ -165,7 +164,7 @@ class Log(ScalarFunction):
     @staticmethod
     def backward(ctx, d_output):
         a = ctx.saved_values
-        return operators.log_back(a, d_output)
+        return operators.log_back(a, d_output),
 
 
 class LT(ScalarFunction):
@@ -177,7 +176,7 @@ class LT(ScalarFunction):
 
     @staticmethod
     def backward(ctx, d_output):
-        return 0.0
+        return 0.0,
 
 
 # To implement.
@@ -189,14 +188,15 @@ class Mul(ScalarFunction):
     @staticmethod
     def forward(ctx, a, b):
         # TODO: Implement for Task 1.2.
-        ctx.save_for_backward(a,b)
-        return operators.mul(a,b)
+        ctx.save_for_backward(a, b)
+        return operators.mul(a, b)
 
     @staticmethod
     def backward(ctx, d_output):
         # TODO: Implement for Task 1.4.
-        a,b = ctx.saved_values
-        return b*d_output, a*d_output
+        a, b = ctx.saved_values
+        return b * d_output, a * d_output
+
 
 class Inv(ScalarFunction):
     "Inverse function"
@@ -210,8 +210,10 @@ class Inv(ScalarFunction):
     @staticmethod
     def backward(ctx, d_output):
         # TODO: Implement for Task 1.4.
+        ":math: `f'_x = -1/x^2`"
         a = ctx.saved_values
-        return operators.inv_back(a, d_output)
+        return operators.inv_back(a, d_output),
+
 
 class Neg(ScalarFunction):
     "Negation function"
@@ -219,11 +221,13 @@ class Neg(ScalarFunction):
     @staticmethod
     def forward(ctx, a):
         # TODO: Implement for Task 1.2.
-        return -a
+        return operators.neg(a)
+
     @staticmethod
     def backward(ctx, d_output):
         # TODO: Implement for Task 1.4.
-        return -d_output
+        return -1.0 * d_output,
+
 
 class Sigmoid(ScalarFunction):
     "Sigmoid function"
@@ -231,16 +235,16 @@ class Sigmoid(ScalarFunction):
     @staticmethod
     def forward(ctx, a):
         # TODO: Implement for Task 1.2.
-        res = operators.sigmoid(a)
-        ctx.save_for_backward(res)
-        return res
+        ctx.save_for_backward(a)
+        return operators.sigmoid(a)
 
     @staticmethod
     def backward(ctx, d_output):
+        ":math: f'_x = f(x) * (1 - f(x))"
         # TODO: Implement for Task 1.4.
-        res = ctx.saved_values
-        der = res * (1 - res)
-        return d_output*der
+        a = ctx.saved_values
+        return operators.sigmoid(a) * (1 - operators.sigmoid(a)) * d_output,
+
 
 class ReLU(ScalarFunction):
     "ReLU function"
@@ -249,13 +253,14 @@ class ReLU(ScalarFunction):
     def forward(ctx, a):
         # TODO: Implement for Task 1.2.
         ctx.save_for_backward(a)
-        return operators.relu(a)
+        return float(operators.relu(a))
 
     @staticmethod
     def backward(ctx, d_output):
         # TODO: Implement for Task 1.4.
-        rel = ctx.saved_values
-        return operators.relu_back(rel, d_output)
+        a = ctx.saved_values
+        return operators.relu_back(a, d_output),
+
 
 class Exp(ScalarFunction):
     "Exp function"
@@ -269,8 +274,9 @@ class Exp(ScalarFunction):
     @staticmethod
     def backward(ctx, d_output):
         # TODO: Implement for Task 1.4.
-        res = ctx.saved_values
-        return operators.exp(a)*d_output
+        a = ctx.saved_values
+        return operators.exp(a) * d_output,
+
 
 def derivative_check(f, *scalars):
 
@@ -282,7 +288,6 @@ def derivative_check(f, *scalars):
     vals = [v for v in scalars]
 
     for i, x in enumerate(scalars):
-        print('i',i, x)
         check = central_difference(f, *vals, arg=i)
         print(x.derivative, check)
         np.testing.assert_allclose(x.derivative, check.data, 1e-2, 1e-2)

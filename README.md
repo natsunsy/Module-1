@@ -19,3 +19,12 @@ cp ../Module-0/operators.py ../Module-0/module.py minitorch/
 python run_tests.py
 ```
 
+* Resultados
+
+```
+python .\project\run_scalar.py
+```
+![Simple](./imagen/visdom_image.jpg)
+
+![Xor](./imagen/visdom_image (1).jpg)
+

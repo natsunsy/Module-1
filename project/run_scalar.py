@@ -8,8 +8,8 @@ import random
 import datasets
 
 PTS = 50
-DATASET = datasets.Simple(PTS, vis=True)
-HIDDEN = 2
+DATASET = datasets.Xor(PTS, vis=True)
+HIDDEN = 10
 RATE = 0.5
 
 
